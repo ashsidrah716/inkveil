@@ -6,11 +6,6 @@ const DiaryPage = forwardRef(
         const textRef = useRef(text);
         const textareaRef = useRef(null);
 
-        // console.log("🖼️ DIARY PAGE RENDER:", {
-        //     number,
-        //     text: JSON.stringify(text),
-        // });
-
         // Keep the textarea synchronized when its [text] changes from outside
         useEffect(() => {
             textRef.current = text;

@@ -16,38 +16,202 @@ body,
 
 body {
   min-height: 100vh;
-  background: linear-gradient(to bottom, rgb(56, 3, 29), rgb(248, 200, 231));
+  /* background: linear-gradient(to bottom, rgb(56, 3, 29), rgb(248, 200, 231)); */
   /* background:
     radial-gradient(circle at 20% 20%, #d98bcf, transparent 35%),
     radial-gradient(circle at 80% 70%, #7d5bb5, transparent 40%),
     linear-gradient(135deg, #b96bbd, #6250a3); */
   /* background-color: black; */
+  background-color: rgb(56, 3, 29);
 }
 
 .app {
   width: 100%;
   min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* WRAPPERS AND ANIMATION CSS */
+.diary-stage {
+  position: absolute;
+  left: 50%;
+  top: 75%;
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+}
+
+.diary-wrapper {
+  width: min(80vw, 670px);
+  aspect-ratio: 3 / 2;
+
+  pointer-events: auto;
+  /* outline: 2px solid red; */
+}
+
+.left-arrow {
+  position: absolute;
+  left: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.right-arrow {
+  position: absolute;
+  right: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.brand {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+
+  font-family: "Caveat", cursive;
+  font-size: 32px;
+  color: white;
+
+  z-index: 40;
+}
+
+.landing-content {
+  position: absolute;
+  left: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: min(38vw, 500px);
+
+  z-index: 30;
+}
+
+.landing-reveal {
+  overflow: hidden;
+  width: fit-content;
+  /* background-color: rgb(198, 177, 187); */
+}
+
+.landing-reveal h1,
+.landing-reveal p,
+.landing-reveal button {
+  transform: translateX(-110%);
+}
+
+.book-cover {
+  position: absolute;
+
+  left: 73%;
+  top: 50%;
+
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: "Italianno", cursive;
+  font-size: clamp(32px, 3vw, 48px);
+
+  transform: translate(-50%, -50%);
+
+  width: min(38vw, 500px);
+  aspect-ratio: 3 / 2;
+
+  z-index: 20;
+  /* background-color: rgb(45, 223, 29); */
+  background-color: rgb(56, 3, 29);
+  /* border: 1px solid rgb(252, 197, 17); */
+  border: 1px solid white;
+
+  /* color: rgb(252, 197, 17); */
+  color: white;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.book-cover:hover {
+  cursor: pointer;
+  background-color: rgb(56, 3, 29);
+  /* background-color: rgb(252, 197, 17); */
+  /* color: white; */
+  color: rgb(252, 197, 17);
+  border: 1px solid rgb(252, 197, 17);
+}
+
+.cover-hint {
+  opacity: 0;
+  font-size: 2vw;
+}
+
+/* COMPONENT ELEMENTS */
+.landing-content h1 {
+  margin: 0 0 20px;
+  color: white;
+
+  font-family: "Caveat", cursive;
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.landing-content p {
+  margin: 0 0 30px;
+  color: white;
+
+  font-family: "Caveat", cursive;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.3;
+}
+
+.landing-content button {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 45px;
+  background: transparent;
+  /* background-color: rgb(56, 3, 29); */
+  color: white;
+
+  padding: 12px 24px;
+
+  font-family: "Caveat", cursive;
+  font-size: 22px;
+
+  cursor: pointer;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.landing-content button:hover {
+  background-color: white;
+  /* color: rgb(56, 3, 29); */
+  color: rgb(252, 197, 17)
 }
 
 .diary-cover {
-  width: min(92vw, 800px);
-  aspect-ratio: 3 / 2;
+  width: 100%;
+  height: 100%;
 
   border-radius: 12px;
-  border: 0.1px solid rgb(248, 200, 231);
+  /* border: 0.1px solid rgb(248, 200, 231); */
+  border: 1px solid rgb(252, 197, 17);
+  /* border: 1px solid white; */
   padding: 10px;
 
   /* background: #5c315f; */
-  background-color: #802357;
-  /* background-color: white;
-  border: 2px solid #5c315f; */
+  /* background-color: #802357; */
+  /* background-color: white; */
+  /* border: 2px solid #5c315f; */
+  background-color: rgb(56, 3, 29);
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .page-arrow {
@@ -66,11 +230,16 @@ body {
   width: 100%;
   height: 100%;
   /* background-color: rgb(105, 105, 73); */
-  background-color: rgb(249, 216, 239);
+  /* background-color: rgb(249, 216, 239); */
+  background-color: rgb(56, 3, 29);
+  /* background-color: rgb(252, 197, 17); */
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 3px 5px;
+
+  /* border: 1px solid white; */
+  border: 1px solid rgb(252, 197, 17);
 
   position: relative;
   overflow: hidden;
@@ -93,33 +262,43 @@ body {
   height: 10%;
   font-family: "Indie Flower", cursive;
   /* font-weight: 600; */
-  border-bottom: 1px dotted rgb(236, 26, 162);
-  background-color: #87456b;
+  border-bottom: 1px dotted rgb(252, 197, 17);
+  /* background-color: #87456b; */
+  background-color: rgb(56, 3, 29);
   color: white;
+  /* color: rgb(252, 197, 17); */
   padding: 10px 5px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1px;
 }
 
 .diary-pages {
   width: 100%;
   height: 90%;
-  background-color: rgb(236, 26, 162);
+  /* background-color: rgb(236, 26, 162); */
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 2px solid #87456b;
-  border-left: 2px solid #87456b;
+  /* border-right: 2px solid #87456b;
+  border-left: 2px solid #87456b; */
+  border-right: 2px solid rgb(56, 3, 29);
+  border-left: 2px solid rgb(56, 3, 29);
 }
 
 .page {
   width: 50%;
   height: 100%;
   /* background-color: rgb(200, 200, 139); */
-  border: 1px solid #cb97c5;
+  /* border: 1px solid #cb97c5; */
+  border: 1px solid rgb(252, 197, 17);
   /* background: #f4ecd8; */
-  color: #841855;
-  background-color: rgb(248, 200, 231);
+  /* color: #841855; */
+  color: rgb(56, 3, 29);
+  /* background-color: rgb(248, 200, 231); */
+  color: white;
 }
 
 .page-content {
@@ -136,20 +315,23 @@ body {
   height: 90%;
   overflow: hidden;
   padding: 0px 5px;
-  /* background-color: #5c315f; */
 
   background-image: repeating-linear-gradient(to bottom,
       transparent 0px,
       transparent 25px,
-      #a05c97 26px);
+      rgb(56, 3, 29) 26px);
 }
 
 .page-footer {
   width: 100%;
   height: 10%;
-  background-color: #87456b;
+  /* background-color: #87456b; */
+  background-color: rgb(56, 3, 29);
   color: white;
   padding: 10px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   font-family: "Indie Flower", cursive;
 }
@@ -166,6 +348,7 @@ body {
 
   font-family: "Caveat", cursive;
   font-size: 22px;
-  color: #841855;
+  /* color: #841855; */
+  color: rgb(56, 3, 29);
   line-height: 26px;
 }

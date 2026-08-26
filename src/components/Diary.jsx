@@ -2,8 +2,6 @@ import { forwardRef, useState, useRef, useEffect } from "react";
 import HTMLFlipBook from "react-pageflip";
 import DiaryPage from "./DiaryPage";
 import { splitFittingText } from "../utils/textOverflow";
-import FrontCover from "./FrontCover";
-import BackCover from "./BackCover";
 
 const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
     const containerRef = useRef(null);
@@ -37,8 +35,8 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
         return () => observer.disconnect();
     }, []);
 
-    //     // Pushes `incomingText` into pageIndex, splitting further if it still overflows.
-    //     // cursorOffset (or null) tracks where the live cursor should end up, if at all.
+    // Pushes `incomingText` into pageIndex, splitting further if it still overflows.
+    // cursorOffset (or null) tracks where the live cursor should end up, if at all.
     const cascadeOverflow = (pageIndex, incomingText, cursorOffset) => {
 
         // Grow the data array as needed — no DOM or React render required yet. 
@@ -136,7 +134,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
 
     return (
         <div className="diary">
-            <div className="diary-header">diary header</div>
+            <div className="diary-header">Inkveil</div>
 
             <div className="diary-pages" ref={containerRef}>
                 <HTMLFlipBook
