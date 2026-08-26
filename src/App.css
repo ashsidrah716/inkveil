@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body,
 #root {
@@ -49,6 +53,7 @@ body {
 .page-arrow {
   border: none;
   background: none;
+  margin: 10px;
 
   color: white;
   font-size: 15px;
@@ -91,7 +96,7 @@ body {
   border-bottom: 1px dotted rgb(236, 26, 162);
   background-color: #87456b;
   color: white;
-  padding: 5px 5px;
+  padding: 10px 5px;
   display: flex;
   justify-content: space-between;
 }
@@ -144,7 +149,7 @@ body {
   height: 10%;
   background-color: #87456b;
   color: white;
-  padding: 5px 5px;
+  padding: 10px 5px;
   text-align: center;
   font-family: "Indie Flower", cursive;
 }
@@ -163,7 +168,4 @@ body {
   font-size: 22px;
   color: #841855;
   line-height: 26px;
-
-  user-select: text;
-  cursor: text;
 }
