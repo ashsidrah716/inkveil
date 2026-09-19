@@ -143,9 +143,56 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
 
     };
 
+
+    // add new spread
+    const addSpread = () => {
+        const nextPageNumber = pagesRef.current.length + 1;
+        // console.log(nextPageNumber);
+        // console.log(pagesRef.current.length);
+
+        pagesRef.current.push(
+            {
+                pageNumber: nextPageNumber,
+                content: "",
+                bookmarked: false,
+                updatedAt: new Date(),
+                tempId: crypto.randomUUID()
+            },
+            {
+                pageNumber: nextPageNumber + 1,
+                content: "",
+                bookmarked: false,
+                updatedAt: new Date(),
+                tempId: crypto.randomUUID()
+            }
+        );
+
+        syncPages();
+    };
+
     return (
         <div className="diary">
-            <div className="diary-header">Inkveil</div>
+            <div className="diary-header">
+                <button className="add-page-button" title="Add pages" onClick={addSpread}>
+                    <i className="ri-add-fill add-button-normal"></i>
+                    <i className="ri-add-box-fill add-button-hover"></i>
+                </button>
+
+                <button className="bookmark-button" title="Bookmark spread">
+                    <i className="ri-bookmark-line bookmark-button-normal"></i>
+                    <i className="ri-bookmark-fill bookmark-button-hover"></i>
+                </button>
+
+                <button className="save-button" title="Save changes">
+                    <i className="ri-save-line save-button-normal"></i>
+                    <i className="ri-save-fill save-button-hover"></i>
+                </button>
+
+                <button className="delete-button" title="Delete last spread">
+                    <i className="ri-delete-bin-6-line delete-button-normal"></i>
+                    <i className="ri-delete-bin-6-fill delete-button-hover"></i>
+                </button>
+            </div>
 
             <div className="diary-pages" ref={containerRef}>
                 <HTMLFlipBook
@@ -173,7 +220,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
                     {/* rendering pages dynamically */}
                     {pages.map((page, index) => (
                         <DiaryPage
-                            key={page._id}
+                            key={page._id || page.tempId}
                             number={page.pageNumber}
                             text={page.content}
                             onChange={(newText) => updatePage(index, newText)}

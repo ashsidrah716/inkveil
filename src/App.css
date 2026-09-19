@@ -270,9 +270,77 @@ body {
   /* color: rgb(252, 197, 17); */
   padding: 10px 5px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 1px;
+}
+
+.diary-header button {
+  background-color: rgb(56, 3, 29);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+}
+
+/* Add New Spread Button */
+.diary-header .add-button-hover {
+  display: none;
+}
+
+.add-page-button .add-button-normal {
+  padding-right: 4px;
+}
+
+.add-page-button:hover .add-button-normal {
+  display: none;
+}
+
+.add-page-button:hover .add-button-hover {
+  font-size: 2rem;
+  display: inline-block;
+  color: rgb(252, 197, 17);
+}
+
+/* Bookmark Spread Button */
+.diary-header .bookmark-button-hover {
+  display: none;
+}
+
+.bookmark-button:hover .bookmark-button-normal {
+  display: none;
+}
+
+.bookmark-button:hover .bookmark-button-hover {
+  display: inline-block;
+  color: rgb(252, 197, 17);
+}
+
+/* Save Button */
+.diary-header .save-button-hover {
+  display: none;
+}
+
+.save-button:hover .save-button-normal {
+  display: none;
+}
+
+.save-button:hover .save-button-hover {
+  display: inline-block;
+  color: rgb(252, 197, 17);
+}
+
+/* Delete Button */
+.diary-header .delete-button-hover {
+  display: none;
+}
+
+.delete-button:hover .delete-button-normal {
+  display: none;
+}
+
+.delete-button:hover .delete-button-hover {
+  display: inline-block;
+  color: rgb(252, 197, 17);
 }
 
 .diary-pages {
