@@ -17,32 +17,11 @@ router.get("/", async (req, res) => {
 // Create - create a new page spread
 router.post("/", async (req, res) => {
     try {
-        // find last page by sorting
-        const lastPage = await Page.findOne()
-            .sort({ pageNumber: -1 });
+        const createdPages = await Page.insertMany(req.body.pages);
 
-        // calculate what the page number of first page of spread is
-        const firstPageNumber = lastPage
-            ? lastPage.pageNumber + 1
-            : 1;
-
-        // add spread
-        const pages = await Page.insertMany([
-            {
-                pageNumber: firstPageNumber,
-                content: "",
-                bookmarked: false
-            },
-            {
-                pageNumber: firstPageNumber + 1,
-                content: "",
-                bookmarked: false
-            }
-        ]);
-
-        res.status(201).json(pages);
+        res.status(201).json(createdPages);
     } catch {
-        res.status(500).json({ message: "Failed to create spread" });
+        res.status(500).json({ message: "Failed to create pages" });
     }
 });
 

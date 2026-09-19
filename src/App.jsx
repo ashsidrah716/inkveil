@@ -1,9 +1,12 @@
 import { useRef, useState, useEffect } from 'react'
 import { gsap } from 'gsap'
 import './App.css'
+
 import DiaryCover from './components/DiaryCover';
 import pageFlipSoundAsset from './assets/page_flip.wav';
 import BookCover from './components/BookCover';
+
+import { getPages } from './api/pagesApi';
 
 // sounds
 const pageFlipSound = new Audio(pageFlipSoundAsset);
@@ -11,10 +14,9 @@ const pageFlipSound = new Audio(pageFlipSoundAsset);
 function App() {
   const bookRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
-  const initialPages = ["", "", "", ""];
 
-  const [pages, setPages] = useState(initialPages);
-  const pagesRef = useRef(initialPages);
+  const [pages, setPages] = useState([]);
+  const pagesRef = useRef([]);
   const coverRef = useRef(null);
 
   // animations
@@ -130,10 +132,29 @@ function App() {
     });
   };
 
+
+  // loading pages from MongoDB
+  useEffect(() => {
+    async function loadPages() {
+      try {
+        const data = await getPages();
+
+        // console.log("LOADED PAGES:", data);
+
+        setPages(data);
+        pagesRef.current = data;
+      } catch (error) {
+        console.error("Failed to load pages: ", error);
+      }
+    }
+
+    loadPages();
+  }, []);
+
   // functions
   // update text of a page
   const updatePage = (pageIndex, text) => {
-    pagesRef.current[pageIndex] = text;
+    pagesRef.current[pageIndex].content = text;
     // no setPages here — text changes shouldn't trigger a re-render
   };
 

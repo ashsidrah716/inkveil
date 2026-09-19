@@ -41,13 +41,24 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
 
         // Grow the data array as needed — no DOM or React render required yet. 
         while (pagesRef.current.length <= pageIndex) {
-            pagesRef.current.push("");
+            pagesRef.current.push({
+                pageNumber: pagesRef.current.length + 1,
+                content: "",
+                bookmarked: false,
+                updatedAt: new Date()
+            });
+
             pagesCreatedRef.current = true;
         }
 
         // ensure total page count stays even (whole spreads)
         if (pagesRef.current.length % 2 !== 0) {
-            pagesRef.current.push("");
+            pagesRef.current.push({
+                pageNumber: pagesRef.current.length + 1,
+                content: "",
+                bookmarked: false,
+                updatedAt: new Date()
+            });
         }
 
         // measurement of visible textarea
@@ -65,7 +76,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
 
         // The page may not be mounted yet. Its text still lives in pagesRef (either as empty string or overflow text)
         // pagesRef gives the text
-        const existing = input ? input.value : pagesRef.current[pageIndex];
+        const existing = input ? input.value : pagesRef.current[pageIndex].content;
         const combinedText = existing ? `${incomingText} ${existing}` : incomingText;
 
         // check if new text is overflowing and set text to only what fits
@@ -73,7 +84,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
             splitFittingText(combinedText, measurementInput);
 
         // Always write the result to the ref — it is the source of truth. 
-        pagesRef.current[pageIndex] = fittingText;
+        pagesRef.current[pageIndex].content = fittingText;
 
         // If the textarea is currently mounted, update it immediately too. 
         if (input) { input.value = fittingText; }
@@ -160,11 +171,11 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
                     }}
                 >
                     {/* rendering pages dynamically */}
-                    {pages.map((text, index) => (
+                    {pages.map((page, index) => (
                         <DiaryPage
-                            key={index}
-                            number={index + 1}
-                            text={text}
+                            key={page._id}
+                            number={page.pageNumber}
+                            text={page.content}
                             onChange={(newText) => updatePage(index, newText)}
                             onOverflow={(overflowText, cursorOffset) => handleOverflow(index, overflowText, cursorOffset)}
                             inputRef={(el) => {
