@@ -6,7 +6,7 @@ import DiaryCover from './components/DiaryCover';
 import pageFlipSoundAsset from './assets/page_flip.wav';
 import BookCover from './components/BookCover';
 
-import { getPages } from './api/pagesApi';
+import { getPages, createPages } from './api/pagesApi';
 
 // sounds
 const pageFlipSound = new Audio(pageFlipSoundAsset);
@@ -159,7 +159,26 @@ function App() {
     // no setPages here — text changes shouldn't trigger a re-render
   };
 
-  const syncPages = () => {
+  const syncPages = async () => {
+    // filter pages that do not have an id yet and POST them
+    const newPages = pagesRef.current.filter(page => !page._id);
+
+    if (newPages.length > 0) {
+      // createPages has IDs that newPages doesn't
+      const createdPages = await createPages(newPages);
+
+      newPages.forEach((page, index) => {
+        // index is of newPages and starts from 0
+        // pagesIndex is index between ALL the pages in pagesRef
+        const pageIndex = pagesRef.current.indexOf(page);
+
+        // if page isn't found, don't continue
+        if (pageIndex !== -1) {
+          pagesRef.current[pageIndex] = createdPages[index];
+        }
+      });
+    }
+
     setPages([...pagesRef.current]);
     // triggeres rerender too
   };

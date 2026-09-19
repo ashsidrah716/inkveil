@@ -160,14 +160,12 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages, playFlipSoun
                 content: "",
                 bookmarked: false,
                 updatedAt: new Date(),
-                tempId: crypto.randomUUID()
             },
             {
                 pageNumber: nextPageNumber + 1,
                 content: "",
                 bookmarked: false,
                 updatedAt: new Date(),
-                tempId: crypto.randomUUID()
             }
         );
 
@@ -268,7 +266,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages, playFlipSoun
                     {/* rendering pages dynamically */}
                     {pages.map((page, index) => (
                         <DiaryPage
-                            key={page._id || page.tempId}
+                            key={page._id}
                             number={page.pageNumber}
                             text={page.content}
                             onChange={(newText) => updatePage(index, newText)}
