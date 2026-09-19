@@ -3,7 +3,7 @@ import HTMLFlipBook from "react-pageflip";
 import DiaryPage from "./DiaryPage";
 
 import { splitFittingText } from "../utils/textOverflow";
-import { deletePages } from "../api/pagesApi";
+import { deletePages, updatePages } from "../api/pagesApi";
 
 const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages, playFlipSound }, ref) => {
     const containerRef = useRef(null);
@@ -138,6 +138,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages, playFlipSoun
 
         if (targetSpread > currentSpread) {
             ref.current?.pageFlip().flipNext(); // focus applied in onFlip once it truly finishes
+            playFlipSound();
         } else {
             const { cursorPos } = pendingFocusRef.current;
             inputsRef.current[index]?.focus();
@@ -170,6 +171,23 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages, playFlipSoun
         );
 
         syncPages();
+    };
+
+    // update pages and save to MongoDB
+    const savePages = async () => {
+        try {
+            const updatedPages = await updatePages(pagesRef.current);
+
+            // console.log("UPDATED PAGES:", updatedPages);
+            // console.log("IS ARRAY:", Array.isArray(updatedPages));
+
+            pagesRef.current = updatedPages;
+            syncPages();
+
+            // console.log("Pages saved");
+        } catch (error) {
+            console.error("Failed to update pages:", error);
+        }
     };
 
     // delete last spread
@@ -213,7 +231,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages, playFlipSoun
                     <i className="ri-bookmark-fill bookmark-button-hover"></i>
                 </button>
 
-                <button className="save-button" title="Save changes">
+                <button className="save-button" title="Save changes" onClick={savePages}>
                     <i className="ri-save-line save-button-normal"></i>
                     <i className="ri-save-fill save-button-hover"></i>
                 </button>

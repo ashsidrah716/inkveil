@@ -139,7 +139,7 @@ function App() {
       try {
         const data = await getPages();
 
-        console.log("LOADED PAGES:", data);
+        // console.log("LOADED PAGES:", data);
 
         setPages(data);
         pagesRef.current = data;

@@ -28,6 +28,22 @@ export async function createPages(pages) {
     return response.json();
 }
 
+export async function updatePages(pages) {
+    const response = await fetch(API_URL, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ pages })
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to update pages");
+    }
+
+    return response.json();
+}
+
 export async function deletePages() {
     const response = await fetch(API_URL, {
         method: "DELETE"
