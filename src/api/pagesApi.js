@@ -11,3 +11,15 @@ export async function getPages() {
     // parse JSON data into JS data
     return response.json();
 }
+
+export async function deletePages() {
+    const response = await fetch(API_URL, {
+        method: "DELETE"
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to delete pages");
+    }
+
+    return response.json();
+}

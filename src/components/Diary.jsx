@@ -1,14 +1,17 @@
 import { forwardRef, useState, useRef, useEffect } from "react";
 import HTMLFlipBook from "react-pageflip";
 import DiaryPage from "./DiaryPage";
-import { splitFittingText } from "../utils/textOverflow";
 
-const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
+import { splitFittingText } from "../utils/textOverflow";
+import { deletePages } from "../api/pagesApi";
+
+const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages, playFlipSound }, ref) => {
     const containerRef = useRef(null);
     const [size, setSize] = useState({ width: 600, height: 400 });
     const inputsRef = useRef([]);
     const pendingFocusRef = useRef(null);
     const pagesCreatedRef = useRef(false);
+    const deletePendingRef = useRef(false);
 
     // make the flipbook responsive to the container size
     useEffect(() => {
@@ -121,7 +124,8 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
 
         cascadeOverflow(pageIndex + 1, overflowText, cursorOffset);
 
-        // The ENTIRE cascade is now finished. // React gets the final data only once, after every page has been updated. 
+        // The ENTIRE cascade is now finished. 
+        // React gets the final data only once, after every page has been updated. 
         if (pagesCreatedRef.current) {
             syncPages();
         }
@@ -170,6 +174,34 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
         syncPages();
     };
 
+    // delete last spread
+    const deleteSpread = async () => {
+        if (pagesRef.current.length <= 2) return;
+
+        const currentPage = ref.current?.pageFlip().getCurrentPageIndex();
+        const lastPage = pagesRef.current.length - 1;
+
+        // if we're on the last spread, flip back first
+        if (currentPage >= lastPage - 1) {
+            deletePendingRef.current = true;
+            playFlipSound();
+            ref.current?.pageFlip().flipPrev();
+            return;
+        }
+
+        // otherwise delete right away
+        try {
+            // first from backend
+            await deletePages();
+
+            // then from local data
+            pagesRef.current.splice(-2, 2);
+            syncPages();
+        } catch (error) {
+            console.error("Failed to delete spread", error);
+        }
+    };
+
     return (
         <div className="diary">
             <div className="diary-header">
@@ -188,7 +220,7 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
                     <i className="ri-save-fill save-button-hover"></i>
                 </button>
 
-                <button className="delete-button" title="Delete last spread">
+                <button className="delete-button" title="Delete last spread" onClick={deleteSpread}>
                     <i className="ri-delete-bin-6-line delete-button-normal"></i>
                     <i className="ri-delete-bin-6-fill delete-button-hover"></i>
                 </button>
@@ -214,6 +246,22 @@ const Diary = forwardRef(({ pages, updatePage, pagesRef, syncPages }, ref) => {
                             inputsRef.current[index]?.focus();
                             inputsRef.current[index]?.setSelectionRange(cursorPos, cursorPos);
                             pendingFocusRef.current = null;
+                        }
+                    }}
+                    onChangeState={(e) => {
+                        // console.log("Page Flip State: ", e.data);
+
+                        if (e.data === "read" && deletePendingRef.current) {
+                            deletePendingRef.current = false;
+
+                            deletePages()
+                                .then(() => {
+                                    pagesRef.current.splice(-2, 2);
+                                    syncPages();
+                                })
+                                .catch((error) => {
+                                    console.error("Failed to delete spread", error);
+                                });
                         }
                     }}
                 >

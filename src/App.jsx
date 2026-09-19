@@ -139,7 +139,7 @@ function App() {
       try {
         const data = await getPages();
 
-        // console.log("LOADED PAGES:", data);
+        console.log("LOADED PAGES:", data);
 
         setPages(data);
         pagesRef.current = data;
@@ -150,6 +150,7 @@ function App() {
 
     loadPages();
   }, []);
+
 
   // functions
   // update text of a page
@@ -163,6 +164,12 @@ function App() {
     // triggeres rerender too
   };
 
+  // play sound on page flip
+  const playFlipSound = () => {
+    pageFlipSound.currentTime = 0;
+    pageFlipSound.play();
+  }
+
   // arrows
   const goPrev = () => {
     if (!isOpen) return;
@@ -171,8 +178,7 @@ function App() {
     const previousPage = currentPage - 2;
 
     if (previousPage >= 0) {
-      pageFlipSound.currentTime = 0;
-      pageFlipSound.play();
+      playFlipSound();
 
       bookRef.current?.pageFlip().flipPrev();
     }
@@ -188,8 +194,7 @@ function App() {
     const nextPage = currentPage + 2;
 
     if (nextPage < pages.length) {
-      pageFlipSound.currentTime = 0;
-      pageFlipSound.play();
+      playFlipSound();
 
       bookRef.current?.pageFlip().flipNext();
     }
@@ -233,6 +238,7 @@ function App() {
             updatePage={updatePage}
             pagesRef={pagesRef}
             syncPages={syncPages}
+            playFlipSound={playFlipSound}
           />
 
           {/* navigation */}
